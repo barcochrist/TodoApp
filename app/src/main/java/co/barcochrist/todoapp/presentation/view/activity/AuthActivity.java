@@ -45,11 +45,6 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
     }
 
     @Override
-    public void goToSignupFragment() {
-
-    }
-
-    @Override
     public void goMainActivity() {
 
     }

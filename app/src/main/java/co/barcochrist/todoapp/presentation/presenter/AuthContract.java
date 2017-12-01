@@ -12,7 +12,6 @@ public interface AuthContract {
      */
     interface View {
         void goToLoginFragment();
-        void goToSignupFragment();
         void goMainActivity();
     }
 

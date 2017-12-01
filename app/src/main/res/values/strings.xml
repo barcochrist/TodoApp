@@ -16,4 +16,5 @@
     <string name="create_account">Crear cuenta</string>
     <string name="recover_password">Recuperar Contraseña</string>
     <string name="recovery">Recuperar</string>
+    <string name="is_required">Campo requerido</string>
 </resources>
