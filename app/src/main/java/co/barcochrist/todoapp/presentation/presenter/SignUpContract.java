@@ -13,12 +13,14 @@ public interface SignUpContract {
         void goToLoginFragment();
 
         void goToMainActivity();
+
+        void showMessageError(Exception error);
     }
 
     /**
      * Interfaz que implementará el Presenter.
      */
     interface UserActionsListener{
-        void onSigup(String fullName, String email, String password);
+        void onSignUp(String fullName, String email, String password);
     }
 }
