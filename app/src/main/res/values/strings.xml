@@ -17,4 +17,7 @@
     <string name="recover_password">Recuperar Contraseña</string>
     <string name="recovery">Recuperar</string>
     <string name="is_required">Campo requerido</string>
+    <string name="accept">Aceptar</string>
+    <string name="recovery_email_sent">Hemos enviado un correo para que recuperes tu contraseña</string>
+
 </resources>
