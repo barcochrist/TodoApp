@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -24,7 +25,7 @@ import co.barcochrist.todoapp.presentation.view.dialog.RecoveryPasswordFragment;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class LoginFragment extends Fragment implements LoginContract.View, View.OnClickListener{
+public class LoginFragment extends Fragment implements LoginContract.View, View.OnClickListener {
 
     private LoginContract.UserActionsListeners mActionListener;
 
@@ -36,12 +37,13 @@ public class LoginFragment extends Fragment implements LoginContract.View, View.
     private TextView tvForgotPassword;
     private Switch swRemember;
     private Button btnStart, btnNotHaveAccount;
+    private ProgressBar pbProgress;
 
     public LoginFragment() {
         // Required empty public constructor
     }
 
-    public static LoginFragment getInstance(){
+    public static LoginFragment getInstance() {
         return new LoginFragment();
     }
 
@@ -50,14 +52,16 @@ public class LoginFragment extends Fragment implements LoginContract.View, View.
                              Bundle savedInstanceState) {
 
         mActionListener = new LoginPresenter(this);
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
-        tilEmail = (TextInputLayout) view.findViewById(R.id.tilEmail);
-        tilPassword = (TextInputLayout) view.findViewById(R.id.tilPassword);
-        tvForgotPassword = (TextView) view.findViewById(R.id.tvForgotPassword);
-        swRemember = (Switch) view.findViewById(R.id.swRemember);
-        btnStart = (Button) view.findViewById(R.id.btnStart);
-        btnNotHaveAccount = (Button) view.findViewById(R.id.btnNotHaveAccount);
 
+        //Obtiene una referencia de los componentes visuales del fragmento Login
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
+        tilEmail = view.findViewById(R.id.tilEmail);
+        tilPassword = view.findViewById(R.id.tilPassword);
+        tvForgotPassword = view.findViewById(R.id.tvForgotPassword);
+        swRemember = view.findViewById(R.id.swRemember);
+        btnStart = view.findViewById(R.id.btnStart);
+        btnNotHaveAccount = view.findViewById(R.id.btnNotHaveAccount);
+        pbProgress = view.findViewById(R.id.pbProgress);
 
         btnStart.setOnClickListener(this);
         btnNotHaveAccount.setOnClickListener(this);
@@ -102,6 +106,16 @@ public class LoginFragment extends Fragment implements LoginContract.View, View.
         Snackbar.make(getView(), error.getMessage(), Snackbar.LENGTH_LONG).show();
     }
 
+    @Override
+    public void showProgress() {
+        pbProgress.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgress() {
+        pbProgress.setVisibility(View.INVISIBLE);
+    }
+
     private void onLogin() {
         try {
             boolean result = true;
@@ -109,7 +123,7 @@ public class LoginFragment extends Fragment implements LoginContract.View, View.
             String password = tilPassword.getEditText().getText().toString();
             boolean remember = swRemember.isChecked();
 
-            if(Utilities.isEmpty(email)) {
+            if (Utilities.isEmpty(email)) {
                 tilEmail.setError(getString(R.string.is_required));
                 tilEmail.setErrorEnabled(true);
                 result = false;
@@ -118,7 +132,7 @@ public class LoginFragment extends Fragment implements LoginContract.View, View.
                 tilEmail.setErrorEnabled(false);
             }
 
-            if(Utilities.isEmpty(password)) {
+            if (Utilities.isEmpty(password)) {
                 tilPassword.setError(getString(R.string.is_required));
                 tilPassword.setErrorEnabled(true);
                 result = false;
@@ -128,7 +142,7 @@ public class LoginFragment extends Fragment implements LoginContract.View, View.
             }
 
             //Si la validaciones no generaron errores
-            if(result) {
+            if (result) {
                 mActionListener.onLogin(email, password, remember);
             }
         } catch (Exception e) {

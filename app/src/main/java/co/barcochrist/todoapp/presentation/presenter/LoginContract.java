@@ -11,14 +11,20 @@ public interface LoginContract {
      */
     interface View {
         void goToSignUpFragment();
+
         void goToMainActivity();
+
         void showMessageError(Exception error);
+
+        void showProgress();
+
+        void hideProgress();
     }
 
     /**
      * Interfaz que implementará el Presenter
      */
-    interface UserActionsListeners{
+    interface UserActionsListeners {
         void onLogin(String email, String password, boolean remember);
     }
 }
