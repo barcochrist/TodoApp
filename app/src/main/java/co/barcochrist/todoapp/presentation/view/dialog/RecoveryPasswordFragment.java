@@ -1,10 +1,14 @@
 package co.barcochrist.todoapp.presentation.view.dialog;
 
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +23,12 @@ import co.barcochrist.todoapp.presentation.presenter.RecoveryPasswordPresenter;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RecoveryPasswordFragment  extends DialogFragment
+public class RecoveryPasswordFragment extends DialogFragment
         implements RecoveryPasswordContract.View, View.OnClickListener {
 
     private RecoveryPasswordContract.UserActionsListener mActionsListener;
+
+    private View view;
     private TextInputLayout tilEmail;
     private TextView tvMessages;
     private Button btnRecovery;
@@ -37,21 +43,33 @@ public class RecoveryPasswordFragment  extends DialogFragment
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_recovery_password, container, false);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
+        view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_recovery_password, null);
         mActionsListener = new RecoveryPasswordPresenter(this);
-
-        tilEmail = (TextInputLayout) view.findViewById(R.id.tilEmail);
-        tvMessages = (TextView) view.findViewById(R.id.tvMessages);
-        btnRecovery = (Button) view.findViewById(R.id.btnRecovery);
-        btnAccept = (Button) view.findViewById(R.id.btnAccept);
+        tilEmail = view.findViewById(R.id.tilEmail);
+        tvMessages = view.findViewById(R.id.tvMessages);
+        btnRecovery = view.findViewById(R.id.btnRecovery);
+        btnAccept = view.findViewById(R.id.btnAccept);
 
         btnRecovery.setOnClickListener(this);
         btnAccept.setOnClickListener(this);
+    }
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         return view;
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(view);
+        return builder.create();
     }
 
     @Override
@@ -80,12 +98,15 @@ public class RecoveryPasswordFragment  extends DialogFragment
         btnAccept.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Valida los campos del formulario y ejecuta el mecanismo para recuperar la contraseña.
+     */
     private void onRecovery() {
         try {
             boolean result = true;
 
             String email = tilEmail.getEditText().getText().toString();
-            if(Utilities.isEmpty(email)) {
+            if (Utilities.isEmpty(email)) {
                 tilEmail.setError(getString(R.string.is_required));
                 tilEmail.setErrorEnabled(true);
                 result = false;
@@ -94,12 +115,11 @@ public class RecoveryPasswordFragment  extends DialogFragment
                 tilEmail.setErrorEnabled(false);
             }
 
-            if(result) {
+            if (result) {
                 mActionsListener.onRecovery(email);
             }
         } catch (Exception e) {
             showErrorMessage(e);
         }
     }
-
 }

@@ -11,10 +11,11 @@ import co.barcochrist.todoapp.helpers.Callback;
 public class RecoveryPasswordPresenter implements RecoveryPasswordContract.UserActionsListener {
 
     private RecoveryPasswordContract.View view;
-    private UserUseCase userUseCase = new UserUseCaseImpl();
+    private UserUseCase userUseCase;
 
     public RecoveryPasswordPresenter(RecoveryPasswordContract.View view) {
         this.view = view;
+        this.userUseCase = new UserUseCaseImpl();
     }
 
     @Override
